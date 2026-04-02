@@ -1,14 +1,65 @@
-import { useRef } from "react"
+import { useRef, useState } from "react"
+import type { FormEvent } from "react"
+import type { Appointment } from "../App"
 
-function Sidebar() {
+interface SidebarProps {
+  selectedDate: string;
+  onDateChange: (date: string) => void;
+  onAddAppointment: (appointment: Omit<Appointment, 'id'>) => void;
+}
+
+function Sidebar({ selectedDate, onDateChange, onAddAppointment }: SidebarProps) {
   const dateRef = useRef<HTMLInputElement>(null)
+  
+  const [selectedTime, setSelectedTime] = useState<string>("")
+  const [clientName, setClientName] = useState<string>("")
+
+  const morningHours = ["09:00", "10:00", "11:00", "12:00"]
+  const afternoonHours = ["13:00", "14:00", "15:00", "16:00", "17:00", "18:00"]
+  const nightHours = ["19:00", "20:00", "21:00"]
 
   const openCalendar = () => {
     dateRef.current?.showPicker()
   }
 
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault()
+
+    if (!selectedTime) {
+      alert("Por favor, selecione um horário.")
+      return
+    }
+
+    if (!clientName.trim()) {
+      alert("Por favor, informe o nome do cliente.")
+      return
+    }
+
+    onAddAppointment({
+      date: selectedDate,
+      time: selectedTime,
+      clientName: clientName
+    })
+
+    setClientName("")
+    setSelectedTime("")
+  }
+
+  const renderHour = (hour: string) => {
+    const isSelected = selectedTime === hour
+    return (
+      <li 
+        key={hour}
+        className={`hour hour-available ${isSelected ? 'hour-selected' : ''}`}
+        onClick={() => setSelectedTime(hour)}
+      >
+        {hour}
+      </li>
+    )
+  }
+
   return (
-    <form className="form">
+    <form className="form" onSubmit={handleSubmit}>
       <header>
         <h1>Agende um atendimento</h1>
         <p>
@@ -29,6 +80,8 @@ function Sidebar() {
           id="date"
           name="date"
           ref={dateRef}
+          value={selectedDate}
+          onChange={(e) => onDateChange(e.target.value)}
           required
         />
 
@@ -41,23 +94,13 @@ function Sidebar() {
 
       <ul id="hours" className="hours">
         <li className="hour-period">Manhã</li>
-        <li className="hour hour-available">09:00</li>
-        <li className="hour hour-available">10:00</li>
-        <li className="hour hour-unavailable">11:00</li>
-        <li className="hour hour-available">12:00</li>
+        {morningHours.map(renderHour)}
 
         <li className="hour-period">Tarde</li>
-        <li className="hour hour-unavailable">13:00</li>
-        <li className="hour hour-unavailable">14:00</li>
-        <li className="hour hour-available">15:00</li>
-        <li className="hour hour-unavailable">16:00</li>
-        <li className="hour hour-unavailable">17:00</li>
-        <li className="hour hour-available">18:00</li>
+        {afternoonHours.map(renderHour)}
 
         <li className="hour-period">Noite</li>
-        <li className="hour hour-available">19:00</li>
-        <li className="hour hour-available">20:00</li>
-        <li className="hour hour-unavailable">21:00</li>
+        {nightHours.map(renderHour)}
       </ul>
 
       <label htmlFor="client" className="label">Cliente</label>
@@ -71,6 +114,8 @@ function Sidebar() {
           id="client"
           name="client"
           placeholder="Nome do cliente"
+          value={clientName}
+          onChange={(e) => setClientName(e.target.value)}
           required
         />
       </div>

@@ -1,4 +1,43 @@
-function Schedule() {
+import type { Appointment } from "../App"
+
+interface ScheduleProps {
+  appointments: Appointment[];
+  selectedDate: string;
+  onRemoveAppointment: (id: string) => void;
+}
+
+function Schedule({ appointments, selectedDate, onRemoveAppointment }: ScheduleProps) {
+  const todaysAppointments = appointments.filter(app => app.date === selectedDate);
+  const sortedAppointments = todaysAppointments.sort((a, b) => a.time.localeCompare(b.time));
+
+  const morning = sortedAppointments.filter(app => {
+    const hour = parseInt(app.time.split(":")[0], 10);
+    return hour >= 9 && hour <= 12;
+  });
+
+  const afternoon = sortedAppointments.filter(app => {
+    const hour = parseInt(app.time.split(":")[0], 10);
+    return hour >= 13 && hour <= 18;
+  });
+
+  const night = sortedAppointments.filter(app => {
+    const hour = parseInt(app.time.split(":")[0], 10);
+    return hour >= 19 && hour <= 21;
+  });
+
+  const renderAppointment = (app: Appointment) => (
+    <li key={app.id}>
+      <strong>{app.time}</strong>
+      <span>{app.clientName}</span>
+      <img
+        src="/src/assets/cancel.svg"
+        alt="Cancelar"
+        className="cancel-icon"
+        onClick={() => onRemoveAppointment(app.id)}
+      />
+    </li>
+  );
+
   return (
     <aside className="schedule">
       <header>
@@ -15,15 +54,7 @@ function Schedule() {
         </header>
 
         <ul className="period">
-          <li>
-            <strong>11:00</strong>
-            <span></span>
-            <img
-              src="/src/assets/cancel.svg"
-              alt="Cancelar"
-              className="cancel-icon"
-            />
-          </li>
+          {morning.map(renderAppointment)}
         </ul>
       </section>
 
@@ -36,15 +67,7 @@ function Schedule() {
         </header>
 
         <ul className="period">
-          <li>
-            <strong>14:00</strong>
-            <span></span>
-            <img
-              src="/src/assets/cancel.svg"
-              alt="Cancelar"
-              className="cancel-icon"
-            />
-          </li>
+          {afternoon.map(renderAppointment)}
         </ul>
       </section>
 
@@ -57,15 +80,7 @@ function Schedule() {
         </header>
 
         <ul className="period">
-          <li>
-            <strong>19:00</strong>
-            <span></span>
-            <img
-              src="/src/assets/cancel.svg"
-              alt="Cancelar"
-              className="cancel-icon"
-            />
-          </li>
+          {night.map(renderAppointment)}
         </ul>
       </section>
     </aside>
