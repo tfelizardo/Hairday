@@ -3,12 +3,13 @@ import type { FormEvent } from "react"
 import type { Appointment } from "../App"
 
 interface SidebarProps {
+  appointments: Appointment[];
   selectedDate: string;
   onDateChange: (date: string) => void;
   onAddAppointment: (appointment: Omit<Appointment, 'id'>) => void;
 }
 
-function Sidebar({ selectedDate, onDateChange, onAddAppointment }: SidebarProps) {
+function Sidebar({ appointments, selectedDate, onDateChange, onAddAppointment }: SidebarProps) {
   const dateRef = useRef<HTMLInputElement>(null)
   
   const [selectedTime, setSelectedTime] = useState<string>("")
@@ -17,6 +18,10 @@ function Sidebar({ selectedDate, onDateChange, onAddAppointment }: SidebarProps)
   const morningHours = ["09:00", "10:00", "11:00", "12:00"]
   const afternoonHours = ["13:00", "14:00", "15:00", "16:00", "17:00", "18:00"]
   const nightHours = ["19:00", "20:00", "21:00"]
+
+  const bookedTimes = appointments
+    .filter(app => app.date === selectedDate)
+    .map(app => app.time);
 
   const openCalendar = () => {
     dateRef.current?.showPicker()
@@ -27,6 +32,11 @@ function Sidebar({ selectedDate, onDateChange, onAddAppointment }: SidebarProps)
 
     if (!selectedTime) {
       alert("Por favor, selecione um horário.")
+      return
+    }
+
+    if (bookedTimes.includes(selectedTime)) {
+      alert("Este horário já está reservado.")
       return
     }
 
@@ -46,12 +56,15 @@ function Sidebar({ selectedDate, onDateChange, onAddAppointment }: SidebarProps)
   }
 
   const renderHour = (hour: string) => {
-    const isSelected = selectedTime === hour
+    const isBooked = bookedTimes.includes(hour)
+    const isSelected = selectedTime === hour && !isBooked
     return (
       <li 
         key={hour}
-        className={`hour hour-available ${isSelected ? 'hour-selected' : ''}`}
-        onClick={() => setSelectedTime(hour)}
+        className={`hour ${isBooked ? 'hour-unavailable' : 'hour-available'} ${isSelected ? 'hour-selected' : ''}`}
+        onClick={() => {
+          if (!isBooked) setSelectedTime(hour)
+        }}
       >
         {hour}
       </li>

@@ -10,20 +10,23 @@ function Schedule({ appointments, selectedDate, onRemoveAppointment }: ScheduleP
   const todaysAppointments = appointments.filter(app => app.date === selectedDate);
   const sortedAppointments = todaysAppointments.sort((a, b) => a.time.localeCompare(b.time));
 
-  const morning = sortedAppointments.filter(app => {
+  const groupedAppointments = sortedAppointments.reduce((groups, app) => {
     const hour = parseInt(app.time.split(":")[0], 10);
-    return hour >= 9 && hour <= 12;
+    if (hour >= 9 && hour <= 12) {
+      groups.morning.push(app);
+    } else if (hour >= 13 && hour <= 18) {
+      groups.afternoon.push(app);
+    } else if (hour >= 19 && hour <= 21) {
+      groups.night.push(app);
+    }
+    return groups;
+  }, {
+    morning: [] as Appointment[],
+    afternoon: [] as Appointment[],
+    night: [] as Appointment[]
   });
 
-  const afternoon = sortedAppointments.filter(app => {
-    const hour = parseInt(app.time.split(":")[0], 10);
-    return hour >= 13 && hour <= 18;
-  });
-
-  const night = sortedAppointments.filter(app => {
-    const hour = parseInt(app.time.split(":")[0], 10);
-    return hour >= 19 && hour <= 21;
-  });
+  const { morning, afternoon, night } = groupedAppointments;
 
   const renderAppointment = (app: Appointment) => (
     <li key={app.id}>

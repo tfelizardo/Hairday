@@ -33,6 +33,7 @@ function App() {
       <img src="/src/assets/logo.svg" alt="Logo" className="logo" />
 
       <Sidebar 
+        appointments={appointments}
         selectedDate={selectedDate}
         onDateChange={setSelectedDate}
         onAddAppointment={handleAddAppointment}
