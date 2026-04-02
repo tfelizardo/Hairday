@@ -1,6 +1,9 @@
 import { useRef, useState } from "react"
 import type { FormEvent } from "react"
 import type { Appointment } from "../App"
+import calendarIcon from "../assets/calendar.svg"
+import arrowDownIcon from "../assets/arrow-down.svg"
+import personIcon from "../assets/person.svg"
 
 interface SidebarProps {
   appointments: Appointment[];
@@ -11,7 +14,7 @@ interface SidebarProps {
 
 function Sidebar({ appointments, selectedDate, onDateChange, onAddAppointment }: SidebarProps) {
   const dateRef = useRef<HTMLInputElement>(null)
-  
+
   const [selectedTime, setSelectedTime] = useState<string>("")
   const [clientName, setClientName] = useState<string>("")
 
@@ -59,7 +62,7 @@ function Sidebar({ appointments, selectedDate, onDateChange, onAddAppointment }:
     const isBooked = bookedTimes.includes(hour)
     const isSelected = selectedTime === hour && !isBooked
     return (
-      <li 
+      <li
         key={hour}
         className={`hour ${isBooked ? 'hour-unavailable' : 'hour-available'} ${isSelected ? 'hour-selected' : ''}`}
         onClick={() => {
@@ -85,7 +88,7 @@ function Sidebar({ appointments, selectedDate, onDateChange, onAddAppointment }:
 
       <div className="input">
         <i className="icon-left">
-          <img src="/src/assets/calendar.svg" alt="Calendário" />
+          <img src={calendarIcon} alt="Calendário" />
         </i>
 
         <input
@@ -99,7 +102,7 @@ function Sidebar({ appointments, selectedDate, onDateChange, onAddAppointment }:
         />
 
         <i className="icon-right" onClick={openCalendar}>
-          <img src="/src/assets/arrow-down.svg" alt="Abrir" />
+          <img src={arrowDownIcon} alt="Abrir" />
         </i>
       </div>
 
@@ -120,7 +123,7 @@ function Sidebar({ appointments, selectedDate, onDateChange, onAddAppointment }:
 
       <div className="input">
         <i>
-          <img src="/src/assets/person.svg" alt="Pessoa" />
+          <img src={personIcon} alt="Pessoa" />
         </i>
         <input
           type="text"

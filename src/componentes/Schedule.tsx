@@ -1,4 +1,8 @@
 import type { Appointment } from "../App"
+import cancelIcon from "../assets/cancel.svg"
+import morningIcon from "../assets/morning.svg"
+import afternoonIcon from "../assets/afternoon.svg"
+import nightIcon from "../assets/night.svg"
 
 interface ScheduleProps {
   appointments: Appointment[];
@@ -33,7 +37,7 @@ function Schedule({ appointments, selectedDate, onRemoveAppointment }: ScheduleP
       <strong>{app.time}</strong>
       <span>{app.clientName}</span>
       <img
-        src="/src/assets/cancel.svg"
+        src={cancelIcon}
         alt="Cancelar"
         className="cancel-icon"
         onClick={() => onRemoveAppointment(app.id)}
@@ -51,7 +55,7 @@ function Schedule({ appointments, selectedDate, onRemoveAppointment }: ScheduleP
       {/* Manhã */}
       <section className="schedule-period">
         <header>
-          <img src="/src/assets/morning.svg" alt="Manhã" />
+          <img src={morningIcon} alt="Manhã" />
           <strong>Manhã</strong>
           <span>09h-12h</span>
         </header>
@@ -64,7 +68,7 @@ function Schedule({ appointments, selectedDate, onRemoveAppointment }: ScheduleP
       {/* Tarde */}
       <section className="schedule-period">
         <header>
-          <img src="/src/assets/afternoon.svg" alt="Tarde" />
+          <img src={afternoonIcon} alt="Tarde" />
           <strong>Tarde</strong>
           <span>13h-18h</span>
         </header>
@@ -77,7 +81,7 @@ function Schedule({ appointments, selectedDate, onRemoveAppointment }: ScheduleP
       {/* Noite */}
       <section className="schedule-period">
         <header>
-          <img src="/src/assets/night.svg" alt="Noite" />
+          <img src={nightIcon} alt="Noite" />
           <strong>Noite</strong>
           <span>19h-21h</span>
         </header>

@@ -2,6 +2,7 @@ import { useState } from "react"
 import Sidebar from "./componentes/Sidebar"
 import Schedule from "./componentes/Schedule"
 import "./index.css"
+import logoImg from "./assets/logo.svg"
 
 export interface Appointment {
   id: string;
@@ -30,7 +31,7 @@ function App() {
 
   return (
     <div className="container">
-      <img src="/src/assets/logo.svg" alt="Logo" className="logo" />
+      <img src={logoImg} alt="Logo" className="logo" />
 
       <Sidebar 
         appointments={appointments}
