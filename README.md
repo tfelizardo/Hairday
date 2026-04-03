@@ -50,25 +50,43 @@ Os agendamentos são agrupados automaticamente:
 ---
 
 ## 📁 Estrutura do Projeto
-
+```
 hairday/
+├── node_modules/
 ├── src/
-│ ├── assets/
-│ │ ├── calendar.svg
-│ │ ├── person.svg
-│ │ └── ...
-│ ├── components/
-│ │ ├── Sidebar.tsx
-│ │ └── Schedule.tsx
-│ ├── App.tsx
-│ ├── main.tsx
-│ ├── global.css
-│ └── schedule.css
+│   ├── assets/
+│   │   ├── afternoon.svg
+│   │   ├── arrow-down.svg
+│   │   ├── calendar.svg
+│   │   ├── cancel.svg
+│   │   ├── logo.svg
+│   │   ├── morning.svg
+│   │   ├── night.svg
+│   │   ├── person.svg
+│   │   └── scissors.svg
+│   │
+│   ├── components/
+│   │   ├── Schedule.tsx
+│   │   └── Sidebar.tsx
+│   │
+│   ├── App.tsx
+│   ├── form.css
+│   ├── global.css
+│   ├── index.css
+│   ├── main.tsx
+│   └── schedule.css
+│
+├── .gitignore
+├── eslint.config.js
 ├── index.html
 ├── package.json
+├── package-lock.json
+├── README.md
+├── tsconfig.app.json
 ├── tsconfig.json
-└── README.md
-
+├── tsconfig.node.json
+└── vite.config.ts
+```
 
 ---
 
@@ -128,7 +146,6 @@ npm install
 # Execute o projeto
 npm run dev
 
-🌐 Deploy
+# O projeto está disponível online em:
 
-O projeto está disponível online em:
 👉 https://hairday-rocket.vercel.app/
