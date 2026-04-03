@@ -40,7 +40,13 @@ function Schedule({ appointments, selectedDate, onRemoveAppointment }: ScheduleP
         src={cancelIcon}
         alt="Cancelar"
         className="cancel-icon"
-        onClick={() => onRemoveAppointment(app.id)}
+        onClick={() => {
+          const confirmDelete = window.confirm("Tem certeza que deseja remover este agendamento?");
+          if (confirmDelete) {
+            onRemoveAppointment(app.id);
+            alert("Agendamento removido com sucesso!");
+          }
+        }}
       />
     </li>
   );
